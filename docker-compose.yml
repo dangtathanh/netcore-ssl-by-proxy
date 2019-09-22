@@ -1,0 +1,43 @@
+version: '2.1'
+
+services:      
+  service-a:
+    image: service-a
+    build: ./service-a
+    # ports:
+    #   - 5000:80
+    #   - 5001:433
+    environment:
+      ASPNETCORE_URLS: "https://+;http://+"
+      ASPNETCORE_HTTPS_PORT: "5001"
+      ASPNETCORE_Kestrel__Certificates__Default__Path: "/cert/localhost.pfx"
+      ASPNETCORE_Kestrel__Certificates__Default__Password: "123456"
+    volumes:
+      - ./service-a/cert:/cert
+      
+  service-b:
+    image: service-b
+    build: ./service-b
+    # ports:
+    #   - 5000:80
+    #   - 5001:433
+    environment:
+      ASPNETCORE_URLS: "https://+;http://+"
+      ASPNETCORE_HTTPS_PORT: "5001"
+      ASPNETCORE_Kestrel__Certificates__Default__Path: "/cert/localhost.pfx"
+      ASPNETCORE_Kestrel__Certificates__Default__Password: "123456"
+    volumes:
+      - ./service-b/cert:/cert
+      
+  proxy:
+    build: 
+      context: ./nginx-reverse-proxy
+      dockerfile: Dockerfile
+    ports:
+      - 8000:80
+      - 8001:443
+    volumes:
+      - ./nginx-reverse-proxy/cert/:/etc/cert/
+    links:
+      - service-a
+      - service-b

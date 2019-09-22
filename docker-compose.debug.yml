@@ -1,0 +1,11 @@
+version: '2.1'
+
+services:
+  service-a:
+    image: service-a
+    build:
+      context: ./service-a
+      dockerfile: Dockerfile
+    ports:
+      - 5000:80
+      - 4330:433
