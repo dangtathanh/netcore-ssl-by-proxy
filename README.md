@@ -2,6 +2,7 @@
 A demo of .net core MVC with SSL using reverse proxy
 
 1. Create self certificate using opensll
+
     a - Execute command to pull & build openssl image
     ```
     docker build -t my-openssl:latest .
